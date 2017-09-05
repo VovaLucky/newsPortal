@@ -1,32 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    Main page
-{% endblock %}
-
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('bootstrap/css/signin.css') }}">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
 {% endblock %}
 
 {% block body %}
-    <div class="container" id="authorizationForm">
-        <form class="form-signin" action="{{ path('authentication') }}" method="POST">
-            <h3 class="form-signin-heading">Sign in to NewsPortal</h3>
-            <input type="email" name="Email" id="Email" class="form-control" placeholder="Email" value="" required autofocus>
-            <input type="password" name="Password" id="Password" class="form-control" placeholder="Password" required>
-            <p class="help-block">
-                <a href="{{ 'resetPassword' }}">
-                    <button type="button" class="btn btn-link btn-block">Forgot password?</button>
-                </a>
-            </p>
-            <button type="submit" class="btn btn-lg btn-success btn-block">Sign in</button>
-        </form>
+    <div class="container panelForm">
+        <a href="{{ path('homepage') }}">
+            <img src="{{ asset('NewsLogo.jpg') }}" class="logo" alt="logo">
+        </a>
 
-        <div class="form-signin">
-            <a href="{{ 'registration' }}">
-                <button type="button" class="btn btn-lg btn-link btn-block">Create an account</button>
-            </a>
-        </div>
+        {% block form %}{% endblock %}
     </div>
 {% endblock %}

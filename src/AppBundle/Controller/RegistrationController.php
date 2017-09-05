@@ -15,7 +15,7 @@ class RegistrationController extends Controller
      */
     public function registrationAction(Request $request)
     {
-        return $this->render('default/registration.html.twig');
+        return $this->render('default/formRegistration.html.twig');
     }
 
     /**
@@ -29,16 +29,16 @@ class RegistrationController extends Controller
     }
 
     /**
-     * @Route("/resetPassword", name="resetPassword")
+     * @Route("/recoverPassword", name="recoverPassword")
      * @Method("GET")
      */
     public function resetPasswordAction(Request $request)
     {
-        return $this->render('default/resetPassword.html.twig');
+        return $this->render('default/recoverPassword.html.twig');
     }
 
     /**
-     * @Route("/reset", name="reset")
+     * @Route("/recover", name="recover")
      * @Method("POST")
      */
     public function resetAction(Request $request)
