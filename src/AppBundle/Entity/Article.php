@@ -6,8 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
- * Article
- *
  * @ORM\Table(name="articles")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ArticleRepository")
  */
@@ -45,7 +43,17 @@ class Article
      */
     private $view;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="article")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    private $category;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="article")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id");
+     */
+    private $author;
 
     public function getId(): int
     {

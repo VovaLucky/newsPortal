@@ -5,8 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Category
- *
  * @ORM\Table(name="categories")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
  */
@@ -30,7 +28,10 @@ class Category
      */
     private $parent;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="Article", mappedBy="category")
+     */
+    private $article;
 
     public function getId(): int
     {

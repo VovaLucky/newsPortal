@@ -47,6 +47,11 @@ class User
      */
     private $userKey;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Article", mappedBy="author")
+     */
+    private $article;
+
     public function getId(): int
     {
         return $this->id;

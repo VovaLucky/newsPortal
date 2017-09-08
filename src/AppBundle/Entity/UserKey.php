@@ -6,8 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
- * UserKey
- *
  * @ORM\Table(name="user_keys")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserKeyRepository")
  */
