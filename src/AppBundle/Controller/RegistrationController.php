@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Security\RegistrationManager;
 
 class RegistrationController extends Controller
 {
@@ -24,8 +25,19 @@ class RegistrationController extends Controller
      */
     public function registerAction(Request $request)
     {
-
-        return $this->redirectToRoute('homepage');
+        $email = $request->request->get('Email');
+        $password = $request->request->get('Password');
+        $repeatPassword = $request->request->get('RepeatPassword');
+        $isSubscribe = ($request->request->get('Subscribe') === 'on');
+        $manager = new RegistrationManager($this->getDoctrine());
+        if ($manager->tryToAddUser($email, $password, $repeatPassword, $isSubscribe))
+        {
+            return $this->redirectToRoute('homepage');
+        }
+        else
+        {
+            return $this->redirectToRoute('registration');
+        }
     }
 
     /**

@@ -52,6 +52,15 @@ class User
      */
     private $article;
 
+    public function __construct(string $email, string $password, bool $isSubscribe, string $role)
+    {
+        $this->email = $email;
+        $this->password = $password;
+        $this->role = $role;
+        $this->isSubscribe = $isSubscribe;
+        $this->isActive = false;
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -105,5 +114,25 @@ class User
     public function getIsSubscribe(): bool
     {
         return $this->isSubscribe;
+    }
+
+    public function setUserKey(UserKey $userKey)
+    {
+        $this->userKey = $userKey;
+    }
+
+    public function getUserKey(): UserKey
+    {
+        return $this->userKey;
+    }
+
+    public function setArticle(Article $article)
+    {
+        $this->article = $article;
+    }
+
+    public function getArticle(): Article
+    {
+        return $this->article;
     }
 }
