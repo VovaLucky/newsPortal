@@ -1,0 +1,18 @@
+{% extends 'default/index.html.twig' %}
+
+{% block title %}
+    Registration
+{% endblock %}
+
+{% block form %}
+    <form class="form-signin" action="{{ path('register') }}" method="POST">
+        <h3>Join NewsPortal</h3>
+        <input type="email" name="Email" id="Email" class="form-control" placeholder="Email" value="" required autofocus>
+        <input type="password" name="Password" class="form-control" placeholder="Password" style="margin-bottom: 0" required>
+        <input type="password" name="RepeatPassword" class="form-control" placeholder="Repeat password" required>
+        <div class="checkbox check">
+            <label><input type="checkbox" name="Subscribe">Subscribe to the newsletter</label>
+        </div>
+        <button type="submit" class="btn btn-lg btn-primary btn-block">Create</button>
+    </form>
+{% endblock %}

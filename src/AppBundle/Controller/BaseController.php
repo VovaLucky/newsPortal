@@ -7,14 +7,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class DefaultController extends Controller
+class BaseController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/articles", name="articles")
      * @Method("GET")
      */
-    public function indexAction(Request $request)
+    public function articlesAction(Request $request)
     {
-        return $this->render('default/formSignIn.html.twig');
+
+        return $this->render('default/articles.html.twig');
     }
 }
