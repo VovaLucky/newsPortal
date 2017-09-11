@@ -6,41 +6,29 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 class DataBaseManager
 {
-    private $doctrine;
+    private $db;
 
     public function __construct(ManagerRegistry $doctrine)
     {
-        $this->doctrine = $doctrine;
+        $this->db = $doctrine->getManager();
     }
 
-    public function addUser(string $email, string $password, bool $isSubscribe)
+    public function addUser(User $user)
     {
-        $db = $this->doctrine->getManager();
-        $user = new User($email, $password, $isSubscribe, 'ROLE_USER');
-        $db->persist($user);
-        $db->flush();
-        $userKey = new UserKey($user, 'registration', 'token', time());
-        $db->persist($userKey);
-        $db->flush();
-        $user->setUserKey($userKey);
-        $db->flush();
+        $this->db->persist($user);
+        $this->db->flush();
 
-//        $db = $this->doctrine->getManager();
-//        $account = new Account('active', 'local');
-//        $db->persist($account);
-//        $db->flush();
-//        $localUser = new User($login, $this->getPasswordHash($password));
-//        $localUser->setAccount($account);
-//        $db->persist($localUser);
-//        $db->flush();
-//        $account->setUser($localUser);
-//        $db->flush();
+        $userKey = new UserKey($user, 'registration', $this->getToken(), $this->getTime());
+        $this->db->persist($userKey);
+        $this->db->flush();
+
+        $user->setUserKey($userKey);
+        $this->db->flush();
     }
 
     public function getUser(string $email):? User
     {
-        return $this->doctrine
-            ->getManager()
+        return $this->db
             ->getRepository('AppBundle\Entity\User')
             ->findOneBy(['email' => $email]);
     }
@@ -50,5 +38,13 @@ class DataBaseManager
         return null !== $this->getUser($email);
     }
 
+    private function getToken(): string
+    {
+        return 'token';
+    }
 
+    private function getTime(): int
+    {
+        return time();
+    }
 }

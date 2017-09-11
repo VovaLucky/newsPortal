@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Security\RegistrationManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RegistrationController extends Controller
 {
@@ -23,13 +24,13 @@ class RegistrationController extends Controller
      * @Route("/register", name="register")
      * @Method("POST")
      */
-    public function registerAction(Request $request)
+    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $email = $request->request->get('Email');
         $password = $request->request->get('Password');
         $repeatPassword = $request->request->get('RepeatPassword');
         $isSubscribe = ($request->request->get('Subscribe') === 'on');
-        $manager = new RegistrationManager($this->getDoctrine());
+        $manager = new RegistrationManager($this->getDoctrine(), $passwordEncoder);
         if ($manager->tryToAddUser($email, $password, $repeatPassword, $isSubscribe))
         {
             return $this->redirectToRoute('homepage');

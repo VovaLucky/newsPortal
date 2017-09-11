@@ -3,12 +3,13 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -52,7 +53,7 @@ class User
      */
     private $article;
 
-    public function __construct(string $email, string $password, bool $isSubscribe, string $role)
+    public function __construct(string $email, string $password, string $role, bool $isSubscribe)
     {
         $this->email = $email;
         $this->password = $password;
@@ -66,12 +67,12 @@ class User
         return $this->id;
     }
 
-    public function setEmail(string $email)
+    public function setUsername(string $email)
     {
         $this->email = $email;
     }
 
-    public function getEmail(): string
+    public function getUsername(): string
     {
         return $this->email;
     }
@@ -91,9 +92,9 @@ class User
         $this->role = $role;
     }
 
-    public function getRole(): string
+    public function getRoles(): array
     {
-        return $this->role;
+        return [$this->role];
     }
 
     public function setIsActive(bool $isActive)
@@ -134,5 +135,14 @@ class User
     public function getArticle(): Article
     {
         return $this->article;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function getSalt()
+    {
+        return null;
     }
 }
