@@ -6,8 +6,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Security\RegistrationManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use AppBundle\Entity\User;
+use AppBundle\Security\RegistrationManager;
 
 class RegistrationController extends Controller
 {
@@ -17,47 +18,50 @@ class RegistrationController extends Controller
      */
     public function registrationAction(Request $request)
     {
-        return $this->render('default/formRegistration.html.twig');
+        return $this->render('form/registration.html.twig');
     }
 
     /**
      * @Route("/register", name="register")
      * @Method("POST")
      */
-    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer)
     {
         $email = $request->request->get('Email');
         $password = $request->request->get('Password');
         $repeatPassword = $request->request->get('RepeatPassword');
         $isSubscribe = ($request->request->get('Subscribe') === 'on');
+
         $manager = new RegistrationManager($this->getDoctrine(), $passwordEncoder);
-        if ($manager->tryToAddUser($email, $password, $repeatPassword, $isSubscribe))
-        {
+        if ($manager->isDataCorrect($email, $password, $repeatPassword)){
+            $user = $manager->addUser($email, $password, $isSubscribe);
+            $this->sendEmail($mailer, $user);
             return $this->redirectToRoute('homepage');
-        }
-        else
-        {
+        } else {
             return $this->redirectToRoute('registration');
         }
     }
 
     /**
-     * @Route("/recoverPassword", name="recoverPassword")
-     * @Method("GET")
+     * @Route("/verifyEmail", name="verifyEmail")
      */
-    public function resetPasswordAction(Request $request)
+    public function verifyEmailAction(Request $request)
     {
-        return $this->render('default/recoverPassword.html.twig');
-    }
-
-    /**
-     * @Route("/recover", name="recover")
-     * @Method("POST")
-     */
-    public function resetAction(Request $request)
-    {
+        $token = $request->query->get('token');
 
         return $this->redirectToRoute('homepage');
     }
 
+    private function sendEmail(\Swift_Mailer $mailer, User $user)
+    {
+        $body = $this->renderView(
+            'email/activate.html.twig',
+            ['token' => $user->getUserKey()->getToken()]
+        );
+        $message = (new \Swift_Message('Verify email'))
+            ->setFrom(['dryg-vova@yandex.ru' => 'NewsPortal'])
+            ->setTo($user->getUsername())
+            ->setBody($body, 'text/html');
+        $mailer->send($message);
+    }
 }

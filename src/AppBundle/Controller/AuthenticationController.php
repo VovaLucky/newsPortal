@@ -18,14 +18,4 @@ class AuthenticationController extends Controller
 
         return $this->redirectToRoute('articles');
     }
-
-    /**
-     * @Route("/signOut", name="signOut")
-     * @Method("POST")
-     */
-    public function signOutAction(Request $request)
-    {
-
-        return $this->redirectToRoute('homepage');
-    }
 }

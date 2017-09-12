@@ -7,6 +7,9 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 class DataBaseManager
 {
     private $db;
+    const BYTE_COUNT = 32;
+    const REGISTRATION_TYPE = 'registration';
+    const RECOVER_TYPE = 'recover';
 
     public function __construct(ManagerRegistry $doctrine)
     {
@@ -15,14 +18,10 @@ class DataBaseManager
 
     public function addUser(User $user)
     {
-        $this->db->persist($user);
-        $this->db->flush();
-
-        $userKey = new UserKey($user, 'registration', $this->getToken(), $this->getTime());
-        $this->db->persist($userKey);
-        $this->db->flush();
-
+        $userKey = new UserKey($user, self::REGISTRATION_TYPE, $this->getToken(), $this->getTime());
         $user->setUserKey($userKey);
+        $this->db->persist($user);
+        $this->db->persist($userKey);
         $this->db->flush();
     }
 
@@ -40,7 +39,7 @@ class DataBaseManager
 
     private function getToken(): string
     {
-        return 'token';
+        return bin2hex(openssl_random_pseudo_bytes(self::BYTE_COUNT));
     }
 
     private function getTime(): int

@@ -15,6 +15,6 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('default/formSignIn.html.twig');
+        return $this->render('form/signIn.html.twig');
     }
 }
