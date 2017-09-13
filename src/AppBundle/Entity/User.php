@@ -3,12 +3,13 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -52,17 +53,26 @@ class User
      */
     private $article;
 
+    public function __construct(string $email, string $password, string $role, bool $isSubscribe)
+    {
+        $this->email = $email;
+        $this->password = $password;
+        $this->role = $role;
+        $this->isSubscribe = $isSubscribe;
+        $this->isActive = false;
+    }
+
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function setEmail(string $email)
+    public function setUsername(string $email)
     {
         $this->email = $email;
     }
 
-    public function getEmail(): string
+    public function getUsername(): string
     {
         return $this->email;
     }
@@ -82,9 +92,9 @@ class User
         $this->role = $role;
     }
 
-    public function getRole(): string
+    public function getRoles(): array
     {
-        return $this->role;
+        return [$this->role];
     }
 
     public function setIsActive(bool $isActive)
@@ -105,5 +115,34 @@ class User
     public function getIsSubscribe(): bool
     {
         return $this->isSubscribe;
+    }
+
+    public function setUserKey(UserKey $userKey)
+    {
+        $this->userKey = $userKey;
+    }
+
+    public function getUserKey(): UserKey
+    {
+        return $this->userKey;
+    }
+
+    public function setArticle(Article $article)
+    {
+        $this->article = $article;
+    }
+
+    public function getArticle(): Article
+    {
+        return $this->article;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function getSalt()
+    {
+        return null;
     }
 }

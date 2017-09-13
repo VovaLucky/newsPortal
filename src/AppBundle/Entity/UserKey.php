@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @ORM\Table(name="user_keys")
@@ -35,13 +34,31 @@ class UserKey
     private $token;
 
     /**
-     * @ORM\Column(name="time", type="datetime")
+     * @ORM\Column(name="time", type="integer")
      */
     private $time;
+
+    public function __construct(User $user, string $type, string $token, int $time)
+    {
+        $this->user = $user;
+        $this->type = $type;
+        $this->token = $token;
+        $this->time = $time;
+    }
 
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
     }
 
     public function setType(string $type)
@@ -64,12 +81,12 @@ class UserKey
         return $this->token;
     }
 
-    public function setTime(DateTime $time)
+    public function setTime(int $time)
     {
         $this->time = $time;
     }
 
-    public function getTime(): DateTime
+    public function getTime(): int
     {
         return $this->time;
     }

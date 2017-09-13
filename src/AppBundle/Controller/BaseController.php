@@ -16,6 +16,6 @@ class BaseController extends Controller
     public function articlesAction(Request $request)
     {
 
-        return $this->render('default/articles.html.twig');
+        return $this->render('news/articles.html.twig');
     }
 }
