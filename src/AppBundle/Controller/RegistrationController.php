@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Security\ActivateManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,7 +19,7 @@ class RegistrationController extends Controller
      */
     public function registrationAction(Request $request)
     {
-        return $this->render('form/registration.html.twig');
+        return $this->render('form/registration.html.twig', ['Message' => '']);
     }
 
     /**
@@ -36,7 +37,7 @@ class RegistrationController extends Controller
         if ($manager->isDataCorrect($email, $password, $repeatPassword)){
             $user = $manager->addUser($email, $password, $isSubscribe);
             $this->sendEmail($mailer, $user);
-            return $this->redirectToRoute('homepage');
+            return $this->render('form/signIn.html.twig', ['Message' => 'Check your email and activate account.']);
         } else {
             return $this->redirectToRoute('registration');
         }
@@ -48,8 +49,11 @@ class RegistrationController extends Controller
     public function verifyEmailAction(Request $request)
     {
         $token = $request->query->get('token');
-
-        return $this->redirectToRoute('homepage');
+        $manager = new ActivateManager($this->getDoctrine());
+        if ($manager->activateUser($token)){
+            return $this->redirectToRoute('homepage');
+        }
+        return $this->render('form/signIn.html.twig', ['Message' => 'The account is already activated or an error occurred.']);
     }
 
     private function sendEmail(\Swift_Mailer $mailer, User $user)

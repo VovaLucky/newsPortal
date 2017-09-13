@@ -37,6 +37,26 @@ class DataBaseManager
         return null !== $this->getUser($email);
     }
 
+    public function getUserByToken(string $token):? User
+    {
+        $userKey = $this->db
+            ->getRepository('AppBundle\Entity\UserKey')
+            ->findOneBy(['token' => $token]);
+        if ($userKey){
+            return $userKey->getUser();
+        } else {
+            return null;
+        }
+    }
+
+    public function activateUser(User $user)
+    {
+        $user->setIsActive(true);
+        $userKey = $user->getUserKey();
+        $this->db->remove($userKey);
+        $this->db->flush();
+    }
+
     private function getToken(): string
     {
         return bin2hex(openssl_random_pseudo_bytes(self::BYTE_COUNT));
