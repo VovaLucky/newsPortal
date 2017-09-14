@@ -19,7 +19,7 @@ class RegistrationController extends Controller
      */
     public function registrationAction(Request $request)
     {
-        return $this->render('form/registration.html.twig', ['Message' => '']);
+        return $this->render('form/registration.html.twig');
     }
 
     /**
@@ -37,7 +37,7 @@ class RegistrationController extends Controller
         if ($manager->isDataCorrect($email, $password, $repeatPassword)){
             $user = $manager->addUser($email, $password, $isSubscribe);
             $this->sendEmail($mailer, $user);
-            return $this->render('form/signIn.html.twig', ['Message' => 'Check your email and activate account.']);
+            return $this->render('form/signIn.html.twig');
         } else {
             return $this->redirectToRoute('registration');
         }
@@ -53,7 +53,7 @@ class RegistrationController extends Controller
         if ($manager->activateUser($token)){
             return $this->redirectToRoute('homepage');
         }
-        return $this->render('form/signIn.html.twig', ['Message' => 'The account is already activated or an error occurred.']);
+        return $this->render('form/signIn.html.twig');
     }
 
     private function sendEmail(\Swift_Mailer $mailer, User $user)
