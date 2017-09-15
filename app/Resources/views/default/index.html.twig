@@ -14,9 +14,5 @@
         {% block form %}{% endblock %}
     </div>
 
-    {% if Message != '' %}
-        <div class="form-signin">
-            <div class="alert alert-info" role="alert">{{ Message }}</div>
-        </div>
-    {% endif %}
+    {% block message %}{% endblock %}
 {% endblock %}

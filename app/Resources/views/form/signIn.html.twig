@@ -5,15 +5,23 @@
 {% endblock %}
 
 {% block form %}
-    <form class="form-signin" action="{{ path('authentication') }}" method="POST">
+    <form class="form-signin" action="{{ path('homepage') }}" method="POST">
         <h3>Sign in to NewsPortal</h3>
-        <input type="email" name="Email" id="Email" class="form-control" placeholder="Email" value="" required autofocus>
-        <input type="password" name="Password" id="Password" class="form-control" placeholder="Password" required>
-        <a href="{{ 'recoverPassword' }}" class="help-block">Forgot password?</a>
+        <input type="email" name="_username" id="Email" class="form-control" placeholder="Email" value="{{ email }}" required autofocus>
+        <input type="password" name="_password" id="Password" class="form-control" placeholder="Password" required>
+        <a href="{{ path('recoverPassword') }}" class="help-block">Forgot password?</a>
         <button type="submit" class="btn btn-lg btn-success btn-block">Sign in</button>
     </form>
 
     <a href="{{ path('registration') }}">
         <button type="button" class="btn btn-lg btn-link btn-block">Create an account</button>
     </a>
+{% endblock %}
+
+{% block message %}
+    {% if error %}
+        <div class="form-signin">
+            <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        </div>
+    {% endif %}
 {% endblock %}
