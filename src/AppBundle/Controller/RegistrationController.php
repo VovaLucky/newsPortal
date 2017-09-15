@@ -37,7 +37,7 @@ class RegistrationController extends Controller
         if ($manager->isDataCorrect($email, $password, $repeatPassword)){
             $user = $manager->addUser($email, $password, $isSubscribe);
             $this->sendEmail($mailer, $user);
-            return $this->render('form/signIn.html.twig');
+            return $this->redirectToRoute('homepage');
         } else {
             return $this->redirectToRoute('registration');
         }
@@ -53,7 +53,7 @@ class RegistrationController extends Controller
         if ($manager->activateUser($token)){
             return $this->redirectToRoute('homepage');
         }
-        return $this->render('form/signIn.html.twig');
+        return $this->redirectToRoute('homepage');
     }
 
     private function sendEmail(\Swift_Mailer $mailer, User $user)
