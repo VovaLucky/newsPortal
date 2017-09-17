@@ -34,11 +34,11 @@ class UserKey
     private $token;
 
     /**
-     * @ORM\Column(name="time", type="integer")
+     * @ORM\Column(name="time", type="datetime")
      */
     private $time;
 
-    public function __construct(User $user, string $type, string $token, int $time)
+    public function __construct(User $user, string $type, string $token, \DateTime $time)
     {
         $this->user = $user;
         $this->type = $type;
@@ -81,12 +81,12 @@ class UserKey
         return $this->token;
     }
 
-    public function setTime(int $time)
+    public function setTime(\DateTime $time)
     {
         $this->time = $time;
     }
 
-    public function getTime(): int
+    public function getTime(): \DateTime
     {
         return $this->time;
     }

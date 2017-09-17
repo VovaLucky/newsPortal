@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Security\ActivateManager;
+use AppBundle\Security\EmailManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -62,10 +63,6 @@ class RegistrationController extends Controller
             'email/activate.html.twig',
             ['token' => $user->getUserKey()->getToken()]
         );
-        $message = (new \Swift_Message('Verify email'))
-            ->setFrom(['dryg-vova@yandex.ru' => 'NewsPortal'])
-            ->setTo($user->getUsername())
-            ->setBody($body, 'text/html');
-        $mailer->send($message);
+        EmailManager::sendMail($mailer, $user, 'Verify email', $body);
     }
 }
