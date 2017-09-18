@@ -40,20 +40,21 @@ class RecoverManager
 
     public function isDataCorrect(string $token, string $password, string $repeatPassword): bool
     {
-        if ((!$this->isPasswordMatch($password, $repeatPassword) && ($this->dbManager->isUserExistByToken($token)))){
-            return false;
-        } else {
+        if (($this->isTokenCorrect($token)) && ($this->isPasswordMatch($password, $repeatPassword))){
             return true;
+        } else {
+            return false;
         }
     }
 
     public function isTokenCorrect(string $token)
     {
-        if ($token !== null){
-            return $this->dbManager->isUserExistByToken($token);
-        } else {
-            return false;
+        if (($token !== null) && ($this->dbManager->isUserExistByToken($token))){
+            if ($this->dbManager->isRecoverToken($token)){
+                return true;
+            }
         }
+        return false;
     }
 
     public function isTimeCorrect($token): bool

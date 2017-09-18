@@ -15,18 +15,19 @@ class ActivateManager
         $this->dbManager = new DataBaseManager($doctrine);
     }
 
-    public function activateUser(string $token): bool
+    public function activateUser(string $token)
     {
-        try{
-            $user = $this->dbManager->getUserByToken($token);
-            if ($user){
-                $this->dbManager->activateUser($user);
+        $user = $this->dbManager->getUserByToken($token);
+        $this->dbManager->activateUser($user);
+    }
+
+    public function isTokenCorrect(string $token)
+    {
+        if (($token !== null) && ($this->dbManager->isUserExistByToken($token))){
+            if ($this->dbManager->isRegistrationToken($token)){
                 return true;
-            } else {
-                return false;
             }
-        } catch (Exception $e) {
-            return false;
         }
+        return false;
     }
 }

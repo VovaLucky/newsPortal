@@ -79,6 +79,18 @@ class DataBaseManager
         $this->db->flush();
     }
 
+    public function isRegistrationToken(string $token): bool
+    {
+        $userKey = $this->getUserByToken($token)->getUserKey();
+        return $userKey->getType() === self::REGISTRATION_TYPE;
+    }
+
+    public function isRecoverToken(string $token): bool
+    {
+        $userKey = $this->getUserByToken($token)->getUserKey();
+        return $userKey->getType() === self::RECOVER_TYPE;
+    }
+
     private function getToken(): string
     {
         return bin2hex(openssl_random_pseudo_bytes(self::BYTE_COUNT));

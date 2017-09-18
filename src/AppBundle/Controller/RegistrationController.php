@@ -37,32 +37,34 @@ class RegistrationController extends Controller
         $manager = new RegistrationManager($this->getDoctrine(), $passwordEncoder);
         if ($manager->isDataCorrect($email, $password, $repeatPassword)){
             $user = $manager->addUser($email, $password, $isSubscribe);
-            $this->sendEmail($mailer, $user);
-            return $this->redirectToRoute('homepage');
-        } else {
-            return $this->redirectToRoute('registration');
+            if ($this->sendEmail($mailer, $user)){
+                return $this->redirectToRoute('homepage');
+            }
         }
+        return $this->redirectToRoute('registration');
     }
 
     /**
      * @Route("/verifyEmail", name="verifyEmail")
+     * @Method("GET")
      */
     public function verifyEmailAction(Request $request)
     {
         $token = $request->query->get('token');
         $manager = new ActivateManager($this->getDoctrine());
-        if ($manager->activateUser($token)){
+        if ($manager->isTokenCorrect($token)){
+            $manager->activateUser($token);
             return $this->redirectToRoute('homepage');
         }
-        return $this->redirectToRoute('homepage');
+        return $this->render('default/error.html.twig');
     }
 
-    private function sendEmail(\Swift_Mailer $mailer, User $user)
+    private function sendEmail(\Swift_Mailer $mailer, User $user): bool
     {
         $body = $this->renderView(
             'email/activate.html.twig',
             ['token' => $user->getUserKey()->getToken()]
         );
-        EmailManager::sendMail($mailer, $user, 'Verify email', $body);
+        return EmailManager::sendMail($mailer, $user, 'Verify email', $body);
     }
 }

@@ -32,8 +32,7 @@ class RecoverPasswordController extends Controller
         if ($email !== null){
             $manager = new RecoverManager($this->getDoctrine(), $passwordEncoder);
             $user = $manager->resetPassword($email);
-            if ($user !== null){
-                $this->sendEmail($mailer, $user);
+            if (($user !== null) && ($this->sendEmail($mailer, $user))){
                 return $this->redirectToRoute('homepage');
             }
         }
@@ -47,11 +46,9 @@ class RecoverPasswordController extends Controller
     public function passwordAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $token = $request->query->get('token');
-        if ($token !== null){
-            $manager = new RecoverManager($this->getDoctrine(), $passwordEncoder);
-            if (($manager->isTokenCorrect($token)) && ($manager->isTimeCorrect($token))){
-                return $this->render('form/newPassword.html.twig', ['token' => $token]);
-            }
+        $manager = new RecoverManager($this->getDoctrine(), $passwordEncoder);
+        if (($manager->isTokenCorrect($token)) && ($manager->isTimeCorrect($token))){
+            return $this->render('form/newPassword.html.twig', ['token' => $token]);
         }
         return $this->render('default/error.html.twig');
     }
@@ -69,18 +66,17 @@ class RecoverPasswordController extends Controller
         $manager = new RecoverManager($this->getDoctrine(), $passwordEncoder);
         if ($manager->isDataCorrect($token, $password, $repeatPassword)) {
             $manager->updatePassword($token, $password);
-        } else {
-            return $this->render('default/error.html.twig');
+            return $this->redirectToRoute('homepage');
         }
-        return $this->redirectToRoute('homepage');
+        return $this->render('default/error.html.twig');
     }
 
-    private function sendEmail(\Swift_Mailer $mailer, User $user)
+    private function sendEmail(\Swift_Mailer $mailer, User $user): bool
     {
         $body = $this->renderView(
             'email/recover.html.twig',
             ['token' => $user->getUserKey()->getToken()]
         );
-        EmailManager::sendMail($mailer, $user, 'Recover password', $body);
+        return EmailManager::sendMail($mailer, $user, 'Recover password', $body);
     }
 }
