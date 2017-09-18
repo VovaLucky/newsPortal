@@ -29,10 +29,10 @@ class RecoverPasswordController extends Controller
     public function resetAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer)
     {
         $email = $request->request->get('Email');
-        if ($email !== null){
+        if ($email !== null) {
             $manager = new RecoverManager($this->getDoctrine(), $passwordEncoder);
             $user = $manager->resetPassword($email);
-            if (($user !== null) && ($this->sendEmail($mailer, $user))){
+            if (($user !== null) && ($this->sendEmail($mailer, $user))) {
                 return $this->redirectToRoute('homepage');
             }
         }
@@ -47,8 +47,10 @@ class RecoverPasswordController extends Controller
     {
         $token = $request->query->get('token');
         $manager = new RecoverManager($this->getDoctrine(), $passwordEncoder);
-        if (($manager->isTokenCorrect($token)) && ($manager->isTimeCorrect($token))){
-            return $this->render('form/newPassword.html.twig', ['token' => $token]);
+        if ($token !== null) {
+            if (($manager->isTokenCorrect($token)) && ($manager->isTimeCorrect($token))) {
+                return $this->render('form/newPassword.html.twig', ['token' => $token]);
+            }
         }
         return $this->render('default/error.html.twig');
     }

@@ -2,46 +2,38 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Security\ActivateManager;
-use AppBundle\Security\EmailManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use AppBundle\Entity\User;
+use AppBundle\Form\UserType;
 use AppBundle\Security\RegistrationManager;
+use AppBundle\Security\ActivateManager;
+use AppBundle\Security\EmailManager;
 
 class RegistrationController extends Controller
 {
     /**
      * @Route("/registration", name="registration")
-     * @Method("GET")
      */
-    public function registrationAction(Request $request)
-    {
-        return $this->render('form/registration.html.twig');
-    }
-
-    /**
-     * @Route("/register", name="register")
-     * @Method("POST")
-     */
-    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer)
-    {
-        $email = $request->request->get('Email');
-        $password = $request->request->get('Password');
-        $repeatPassword = $request->request->get('RepeatPassword');
-        $isSubscribe = ($request->request->get('Subscribe') === 'on');
-
-        $manager = new RegistrationManager($this->getDoctrine(), $passwordEncoder);
-        if ($manager->isDataCorrect($email, $password, $repeatPassword)){
-            $user = $manager->addUser($email, $password, $isSubscribe);
-            if ($this->sendEmail($mailer, $user)){
+    public function registrationAction(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        \Swift_Mailer $mailer
+    ) {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager = new RegistrationManager($this->getDoctrine(), $passwordEncoder);
+            $manager->addUser($user);
+            if ($this->sendEmail($mailer, $user)) {
                 return $this->redirectToRoute('homepage');
             }
         }
-        return $this->redirectToRoute('registration');
+        return $this->render('form/registration.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -52,7 +44,7 @@ class RegistrationController extends Controller
     {
         $token = $request->query->get('token');
         $manager = new ActivateManager($this->getDoctrine());
-        if ($manager->isTokenCorrect($token)){
+        if (($token !== null) && ($manager->isTokenCorrect($token))) {
             $manager->activateUser($token);
             return $this->redirectToRoute('homepage');
         }

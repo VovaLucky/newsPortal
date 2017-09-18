@@ -21,9 +21,9 @@ class RecoverManager
 
     public function resetPassword(string $email):? User
     {
-        if ($this->dbManager->isUserExist($email)){
+        if ($this->dbManager->isUserExist($email)) {
             $user = $this->dbManager->getUser($email);
-            if ($user->getUserKey() === null){
+            if ($user->getUserKey() === null) {
                 $this->dbManager->resetPassword($user);
                 return $user;
             }
@@ -40,7 +40,7 @@ class RecoverManager
 
     public function isDataCorrect(string $token, string $password, string $repeatPassword): bool
     {
-        if (($this->isTokenCorrect($token)) && ($this->isPasswordMatch($password, $repeatPassword))){
+        if (($this->isTokenCorrect($token)) && ($this->isPasswordMatch($password, $repeatPassword))) {
             return true;
         } else {
             return false;
@@ -49,8 +49,8 @@ class RecoverManager
 
     public function isTokenCorrect(string $token)
     {
-        if (($token !== null) && ($this->dbManager->isUserExistByToken($token))){
-            if ($this->dbManager->isRecoverToken($token)){
+        if ($this->dbManager->isUserExistByToken($token)) {
+            if ($this->dbManager->isRecoverToken($token)) {
                 return true;
             }
         }
@@ -63,7 +63,7 @@ class RecoverManager
         $time = $userKey->getTime()->getTimestamp();
         $now = new \DateTime();
         $interval = $now->getTimestamp() - $time;
-        if ($interval < self::MAX_INTERVAL){
+        if ($interval < self::MAX_INTERVAL) {
             return true;
         } else {
             return false;

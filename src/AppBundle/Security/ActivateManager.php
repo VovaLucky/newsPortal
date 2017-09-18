@@ -23,8 +23,8 @@ class ActivateManager
 
     public function isTokenCorrect(string $token)
     {
-        if (($token !== null) && ($this->dbManager->isUserExistByToken($token))){
-            if ($this->dbManager->isRegistrationToken($token)){
+        if ($this->dbManager->isUserExistByToken($token)) {
+            if ($this->dbManager->isRegistrationToken($token)) {
                 return true;
             }
         }

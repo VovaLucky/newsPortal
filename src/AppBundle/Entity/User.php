@@ -3,28 +3,39 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @UniqueEntity(fields="email", message="Email already taken")
  */
 class User implements AdvancedUserInterface, \Serializable
 {
     /**
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email;
 
     /**
-     * @ORM\Column(name="password", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
+     */
+    private $plainPassword;
+
+    /**
+     * @ORM\Column(name="password", type="string", length=64)
      */
     private $password;
 
@@ -53,15 +64,6 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $article;
 
-    public function __construct(string $email, string $password, string $role, bool $isSubscribe)
-    {
-        $this->email = $email;
-        $this->password = $password;
-        $this->role = $role;
-        $this->isSubscribe = $isSubscribe;
-        $this->isActive = false;
-    }
-
     public function getId(): int
     {
         return $this->id;
@@ -75,6 +77,26 @@ class User implements AdvancedUserInterface, \Serializable
     public function getUsername(): string
     {
         return $this->email;
+    }
+
+    public function setEmail(string $email)
+    {
+        $this->email = $email;
+    }
+
+    public function getEmail():? string
+    {
+        return $this->email;
+    }
+
+    public function setPlainPassword(string $plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+    public function getPlainPassword():? string
+    {
+        return $this->plainPassword;
     }
 
     public function setPassword(string $password)
@@ -112,7 +134,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->isSubscribe = $isSubscribe;
     }
 
-    public function getIsSubscribe(): bool
+    public function getIsSubscribe():? bool
     {
         return $this->isSubscribe;
     }
