@@ -29,11 +29,9 @@ class RegistrationManager
 
     public function isDataCorrect(string $email, string $password, string $repeatPassword): bool
     {
-        if (!$this->isPasswordMatch($password, $repeatPassword)) {
-            return false;
-        }
-        if($this->dbManager->isUserExist($email)) {
-            return false;
+        if ((!$this->isPasswordMatch($password, $repeatPassword)) ||
+            ($this->dbManager->isUserExist($email))){
+                return false;
         }
         return true;
     }

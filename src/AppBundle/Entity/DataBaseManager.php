@@ -49,6 +49,11 @@ class DataBaseManager
         }
     }
 
+    public function isUserExistByToken(string $token): bool
+    {
+        return null !== $this->getUserByToken($token);
+    }
+
     public function activateUser(User $user)
     {
         $user->setIsActive(true);
@@ -57,13 +62,42 @@ class DataBaseManager
         $this->db->flush();
     }
 
+    public function resetPassword(User $user)
+    {
+        $userKey = new UserKey($user, self::RECOVER_TYPE, $this->getToken(), $this->getTime());
+        $user->setUserKey($userKey);
+        $this->db->persist($user);
+        $this->db->persist($userKey);
+        $this->db->flush();
+    }
+
+    public function updatePassword(User $user)
+    {
+        $userKey = $user->getUserKey();
+        $this->db->remove($userKey);
+        $this->db->persist($user);
+        $this->db->flush();
+    }
+
+    public function isRegistrationToken(string $token): bool
+    {
+        $userKey = $this->getUserByToken($token)->getUserKey();
+        return $userKey->getType() === self::REGISTRATION_TYPE;
+    }
+
+    public function isRecoverToken(string $token): bool
+    {
+        $userKey = $this->getUserByToken($token)->getUserKey();
+        return $userKey->getType() === self::RECOVER_TYPE;
+    }
+
     private function getToken(): string
     {
         return bin2hex(openssl_random_pseudo_bytes(self::BYTE_COUNT));
     }
 
-    private function getTime(): int
+    private function getTime(): \DateTime
     {
-        return time();
+        return new \DateTime();
     }
 }

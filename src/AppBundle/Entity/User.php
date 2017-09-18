@@ -122,7 +122,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->userKey = $userKey;
     }
 
-    public function getUserKey(): UserKey
+    public function getUserKey():? UserKey
     {
         return $this->userKey;
     }
@@ -132,7 +132,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->article = $article;
     }
 
-    public function getArticle(): Article
+    public function getArticle():? Article
     {
         return $this->article;
     }
@@ -146,27 +146,27 @@ class User implements AdvancedUserInterface, \Serializable
         return null;
     }
 
-    public function isAccountNonExpired()
+    public function isAccountNonExpired(): bool
     {
         return true;
     }
 
-    public function isAccountNonLocked()
+    public function isAccountNonLocked(): bool
     {
         return true;
     }
 
-    public function isCredentialsNonExpired()
+    public function isCredentialsNonExpired(): bool
     {
         return true;
     }
 
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->isActive;
     }
 
-    public function serialize()
+    public function serialize(): string
     {
         return serialize([
             $this->id,
