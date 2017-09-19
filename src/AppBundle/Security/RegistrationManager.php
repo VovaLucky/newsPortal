@@ -19,31 +19,17 @@ class RegistrationManager
         $this->encoder = $encoder;
     }
 
-    public function addUser(string $email, string $password, bool $isSubscribe): User
+    public function addUser(User $user)
     {
-        $user = new User($email, $password, self::DEFAULT_ROLE, $isSubscribe);
         $this->encodePassword($user);
+        $user->setRole(self::DEFAULT_ROLE);
+        $user->setIsActive(false);
         $this->dbManager->addUser($user);
-        return $user;
-    }
-
-    public function isDataCorrect(string $email, string $password, string $repeatPassword): bool
-    {
-        if ((!$this->isPasswordMatch($password, $repeatPassword)) ||
-            ($this->dbManager->isUserExist($email))){
-                return false;
-        }
-        return true;
-    }
-
-    private function isPasswordMatch(string $password, string $repeatPassword): bool
-    {
-        return ($password == $repeatPassword);
     }
 
     private function encodePassword(User $user)
     {
-        $encodedPassword = $this->encoder->encodePassword($user, $user->getPassword());
+        $encodedPassword = $this->encoder->encodePassword($user, $user->getPlainPassword());
         $user->setPassword($encodedPassword);
     }
 }

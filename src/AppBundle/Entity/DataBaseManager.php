@@ -42,7 +42,7 @@ class DataBaseManager
         $userKey = $this->db
             ->getRepository('AppBundle\Entity\UserKey')
             ->findOneBy(['token' => $token]);
-        if ($userKey){
+        if ($userKey) {
             return $userKey->getUser();
         } else {
             return null;
