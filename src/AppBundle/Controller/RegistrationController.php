@@ -33,7 +33,10 @@ class RegistrationController extends Controller
                 return $this->redirectToRoute('homepage');
             }
         }
-        return $this->render('form/registration.html.twig', ['form' => $form->createView()]);
+        return $this->render('form/registration.html.twig', [
+            'form' => $form->createView(),
+            'errors' => $form->getErrors(true, true)
+        ]);
     }
 
     /**

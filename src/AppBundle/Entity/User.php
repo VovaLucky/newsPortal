@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 /**
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
- * @UniqueEntity(fields="email", message="Email already taken")
+ * @UniqueEntity(fields="email", message="Email already taken.")
  */
 class User implements AdvancedUserInterface, \Serializable
 {

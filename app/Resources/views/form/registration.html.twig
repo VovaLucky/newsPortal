@@ -1,9 +1,61 @@
-{{ form_start(form) }}
-    {{ form_errors(form) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.plainPassword.first) }}
-    {{ form_row(form.plainPassword.second) }}
-    {{ form_row(form.isSubscribe) }}
+{% extends 'default/index.html.twig' %}
 
-    <button type="submit" class="btn btn-lg btn-info btn-block">Create</button>
-{{ form_end(form) }}
+{% block title %}
+    Registration
+{% endblock %}
+
+{% block form %}
+    {{ form_start(form, {'attr': {'class': 'form-signin'}}) }}
+        <h3>Join NewsPortal</h3>
+
+        {{ form_widget(
+            form.email,
+            {'attr': {
+                'class': 'form-control',
+                'placeholder': 'Email',
+                'autofocus': 'true'
+            }})
+        }}
+
+        {{ form_widget(
+            form.plainPassword.first,
+            {'attr': {
+                'class': 'form-control',
+                'placeholder': 'Password'
+            }})
+        }}
+
+        {{ form_widget(
+            form.plainPassword.second,
+            {'attr': {
+                'class': 'form-control',
+                'placeholder': 'Repeat password'
+            }})
+        }}
+
+        <div class="checkbox check">
+            <label>
+                {{ form_widget(
+                    form.isSubscribe,
+                    {'attr': {
+                        'checked': 'true'
+                    }})
+                }}
+                Subscribe to the newsletter
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-info btn-block">Create</button>
+    {{ form_end(form) }}
+
+    {% if errors.count > 0 %}
+        <div class="form-signin">
+            {% for error in errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error.getMessage() }}
+                </div>
+            {% endfor%}
+        </div>
+    {% endif %}
+{% endblock %}
+

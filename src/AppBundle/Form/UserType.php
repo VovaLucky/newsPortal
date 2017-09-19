@@ -20,7 +20,8 @@ class UserType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options'  => ['label' => 'Password'],
-                'second_options' => ['label' => 'Repeat Password']
+                'second_options' => ['label' => 'Repeat Password'],
+                'invalid_message' => 'Passwords don\'t match.'
             ])
             ->add('isSubscribe', CheckboxType::class, ['required' => false])
         ;
