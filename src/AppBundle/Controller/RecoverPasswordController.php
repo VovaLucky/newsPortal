@@ -19,6 +19,9 @@ class RecoverPasswordController extends Controller
      */
     public function resetPasswordAction(Request $request)
     {
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('articles');
+        }
         return $this->render('form/recoverPassword.html.twig');
     }
 

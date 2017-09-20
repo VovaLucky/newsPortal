@@ -23,6 +23,9 @@ class RegistrationController extends Controller
         UserPasswordEncoderInterface $passwordEncoder,
         \Swift_Mailer $mailer
     ) {
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('articles');
+        }
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);

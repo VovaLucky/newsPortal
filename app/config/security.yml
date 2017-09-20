@@ -27,8 +27,8 @@ security:
                 target: /
 
     access_control:
-        # require ROLE_ADMIN for /admin*
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/manager, roles: ROLE_MANAGER }
 
     role_hierarchy:
         ROLE_MANAGER: ROLE_USER
