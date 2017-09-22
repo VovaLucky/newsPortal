@@ -66,10 +66,9 @@
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
                     <li><a href="#">All news</a></li>
-
-                    <li><a href="#">Society</a></li>
-                    <li><a href="#">Sport</a></li>
-                    <li><a href="#">World</a></li>
+                    {% for category in categories %}
+                        <li><a href="#">{{ category.getName }}</a></li>
+                    {% endfor %}
                 </ul>
             </div>
 

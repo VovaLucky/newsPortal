@@ -11,6 +11,22 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="page-header">Title</h1>
-
+    <h1 class="page-header">
+        {{ article.title }}
+        <small><span class="badge">{{ article.getView }}</span></small>
+    </h1>
+    <div class="row">
+        <div class="col-md-2">
+            <p>{{ article.getDate|date("d.m.Y H:i") }}</p>
+        </div>
+        <div class="col-md-10">
+            <p>{{ article.getAuthor.getUsername }}</p>
+        </div>
+    </div>
+    <div class="container">
+        <img src="{{ article.image }}" class="img-responsive center-block article-img" alt="Image">
+        <p>
+            {{ article.text }}
+        </p>
+    </div>
 {% endblock %}

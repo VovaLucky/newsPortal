@@ -6,19 +6,30 @@
 {% endblock %}
 
 {% block content %}
-
     <hr class="featurette-divider">
-    <div class="row featurette">
-        <a href="{{ path('news') }}">
-            <div class="col-md-9 col-md-push-3">
-                <h2 class="featurette-heading">Title <span class="text-muted">Views</span></h2>
-                <p class="lead">TEXT</p>
-            </div>
-            <div class="col-md-3 col-md-pull-9">
-                <img src="#" class="featurette-image img-responsive center-block" alt="Image">
-            </div>
-        </a>
-    </div>
+    {% for article in articles %}
+        <div class="row featurette">
+            <a href="{{ path('news', {'page': article.getId}) }}">
+                <div class="col-md-9 col-md-push-3">
+                    <h2 class="featurette-heading">
+                        {{ article.getTitle }}
+                        <small><span class="badge">{{ article.getView }}</span></small>
+                    </h2>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <p>{{ article.getDate|date("d.m.Y H:i") }}</p>
+                        </div>
+                        <div class="col-md-10">
+                            <p>{{ article.getAuthor.getUsername }}</p>
+                        </div>
+                    </div>
+                    <p class="lead">{{ article.getShortText }}</p>
+                </div>
+                <div class="col-md-3 col-md-pull-9">
+                    <img src="{{ article.getImage }}" class="featurette-image img-responsive center-block" alt="Image">
+                </div>
+            </a>
+        </div>
     <hr class="featurette-divider">
-
+    {% endfor %}
 {% endblock %}
