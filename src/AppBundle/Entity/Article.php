@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @ORM\Table(name="articles")
@@ -32,6 +31,8 @@ class Article
      * @ORM\Column(name="text", type="text")
      */
     private $text;
+
+    const SIZE_SHORT_TEXT = 150;
 
     /**
      * @ORM\Column(name="image", type="string", length=255)
@@ -70,12 +71,12 @@ class Article
         return $this->title;
     }
 
-    public function setDate(DateTime $date)
+    public function setDate(\DateTime $date)
     {
         $this->date = $date;
     }
 
-    public function getDate(): DateTime
+    public function getDate(): \DateTime
     {
         return $this->date;
     }
@@ -88,6 +89,15 @@ class Article
     public function getText(): string
     {
         return $this->text;
+    }
+
+    public function getShortText(): string
+    {
+        $text = $this->getText();
+        if (mb_strlen($text) > self::SIZE_SHORT_TEXT) {
+            $text = mb_substr($text, 0, self::SIZE_SHORT_TEXT) . '...';
+        }
+        return $text;
     }
 
     public function setImage(string $image)
@@ -108,6 +118,31 @@ class Article
     public function getView(): int
     {
         return $this->view;
+    }
+
+    public function increaseView()
+    {
+        $this->view++;
+    }
+
+    public function setCategory(Category $category)
+    {
+        $this->category = $category;
+    }
+
+    public function getCategory(): Category
+    {
+        return $this->category;
+    }
+
+    public function setAuthor(User $author)
+    {
+        $this->author = $author;
+    }
+
+    public function getAuthor(): User
+    {
+        return $this->author;
     }
 }
 

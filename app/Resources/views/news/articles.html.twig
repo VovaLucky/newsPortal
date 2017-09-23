@@ -1,9 +1,39 @@
-{% extends 'base.html.twig' %}
+{% extends 'news/articlesBase.html.twig' %}
 
-{% block title %}
-    Articles
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/articles.css') }}">
 {% endblock %}
 
-{% block body %}
-    <h2>Articles</h2>
+{% block content %}
+    {% if articles|length >= 3 %}
+        {{ include('news/carousel.html.twig', { 'articles': articles }) }}
+    {% endif %}
+
+    {% for article in articles %}
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <a href="{{ path('newsPage', {'page': article.getId}) }}">
+                <div class="col-md-9 col-md-push-3">
+                    <h2 class="featurette-heading">
+                        {{ article.getTitle }}
+                        <small><span class="badge">{{ article.getView }}</span></small>
+                    </h2>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <p>{{ article.getDate|date("d.m.Y H:i") }}</p>
+                        </div>
+                        <div class="col-md-10">
+                            <p>{{ article.getAuthor.getUsername }}</p>
+                        </div>
+                    </div>
+                    <p class="lead">{{ article.getShortText }}</p>
+                </div>
+                <div class="col-md-3 col-md-pull-9">
+                    <img src="{{ article.getImage }}" class="featurette-image img-responsive center-block" alt="Image">
+                </div>
+            </a>
+        </div>
+        <hr class="featurette-divider">
+    {% endfor %}
 {% endblock %}

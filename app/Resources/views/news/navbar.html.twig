@@ -1,0 +1,56 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand">News Portal</a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ path('news') }}">News</a></li>
+                <li><a href="{{ path('popular') }}">Popular</a></li>
+
+                {% if is_granted('ROLE_MANAGER') %}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Add
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Article</a></li>
+                            <li><a href="#">Category</a></li>
+                        </ul>
+                    </li>
+                    {% block edit %}{% endblock %}
+                {% endif %}
+            </ul>
+
+            <form class="navbar-form navbar-right">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search..." aria-label="Search">
+                <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        {{ user.getEmail }}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('logout') }}">Log out</a></li>
+                        {% if user.getIsSubscribe %}
+                            <li><a href="#">Unsubscribe</a></li>
+                        {% else %}
+                            <li><a href="#">Subscribe</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
+
+            {% if is_granted('ROLE_ADMIN') %}
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Users</a></li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</nav>

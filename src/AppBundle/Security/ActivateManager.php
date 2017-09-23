@@ -4,7 +4,6 @@ namespace AppBundle\Security;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use AppBundle\Entity\DataBaseManager;
-use Exception;
 
 class ActivateManager
 {

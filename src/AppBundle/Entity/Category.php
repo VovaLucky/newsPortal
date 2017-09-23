@@ -49,5 +49,25 @@ class Category
     {
         return $this->name;
     }
+
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    public function getParent():? Category
+    {
+        return $this->parent;
+    }
+
+    public function setArticle(Article $article)
+    {
+        $this->article = $article;
+    }
+
+    public function getArticle():? Article
+    {
+        return $this->article;
+    }
 }
 
