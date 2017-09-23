@@ -21,7 +21,7 @@ security:
             form_login:
                 login_path: homepage
                 check_path: homepage
-                default_target_path: articles
+                default_target_path: news
             logout:
                 path:   /logout
                 target: /

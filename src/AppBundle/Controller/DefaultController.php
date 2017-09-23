@@ -16,7 +16,7 @@ class DefaultController extends Controller
     public function indexAction(Request $request, AuthenticationUtils $authUtils)
     {
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('articles');
+            return $this->redirectToRoute('news');
         }
         $error = $authUtils->getLastAuthenticationError();
         $email = $authUtils->getLastUsername();

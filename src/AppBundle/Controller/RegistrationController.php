@@ -6,7 +6,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 use AppBundle\Security\RegistrationManager;
@@ -20,17 +19,16 @@ class RegistrationController extends Controller
      */
     public function registrationAction(
         Request $request,
-        UserPasswordEncoderInterface $passwordEncoder,
+        RegistrationManager $manager,
         \Swift_Mailer $mailer
     ) {
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('articles');
+            return $this->redirectToRoute('news');
         }
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager = new RegistrationManager($this->getDoctrine(), $passwordEncoder);
             $manager->addUser($user);
             if ($this->sendEmail($mailer, $user)) {
                 return $this->redirectToRoute('homepage');
@@ -46,10 +44,9 @@ class RegistrationController extends Controller
      * @Route("/verifyEmail", name="verifyEmail")
      * @Method("GET")
      */
-    public function verifyEmailAction(Request $request)
+    public function verifyEmailAction(Request $request, ActivateManager $manager)
     {
         $token = $request->query->get('token');
-        $manager = new ActivateManager($this->getDoctrine());
         if (($token !== null) && ($manager->isTokenCorrect($token))) {
             $manager->activateUser($token);
             return $this->redirectToRoute('homepage');

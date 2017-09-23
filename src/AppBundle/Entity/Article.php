@@ -120,6 +120,11 @@ class Article
         return $this->view;
     }
 
+    public function increaseView()
+    {
+        $this->view++;
+    }
+
     public function setCategory(Category $category)
     {
         $this->category = $category;

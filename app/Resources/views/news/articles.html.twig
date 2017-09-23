@@ -6,10 +6,14 @@
 {% endblock %}
 
 {% block content %}
-    <hr class="featurette-divider">
+    {% if articles|length >= 3 %}
+        {{ include('news/carousel.html.twig', { 'articles': articles }) }}
+    {% endif %}
+
     {% for article in articles %}
+        <hr class="featurette-divider">
         <div class="row featurette">
-            <a href="{{ path('news', {'page': article.getId}) }}">
+            <a href="{{ path('newsPage', {'page': article.getId}) }}">
                 <div class="col-md-9 col-md-push-3">
                     <h2 class="featurette-heading">
                         {{ article.getTitle }}
@@ -30,6 +34,6 @@
                 </div>
             </a>
         </div>
-    <hr class="featurette-divider">
+        <hr class="featurette-divider">
     {% endfor %}
 {% endblock %}

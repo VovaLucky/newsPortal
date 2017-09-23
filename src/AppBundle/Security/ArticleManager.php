@@ -5,6 +5,7 @@ namespace AppBundle\Security;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use AppBundle\Entity\DataBaseArticleManager;
 use AppBundle\Entity\Article;
+use AppBundle\Entity\Category;
 
 class ArticleManager
 {
@@ -17,29 +18,33 @@ class ArticleManager
         $this->dbManager = new DataBaseArticleManager($doctrine);
     }
 
-    public function getCategories($category): array
+    public function getCategoryByName(string $name):? Category
     {
-        return $this->dbManager->getCategories($category);
+        return $this->dbManager->getCategoryByName($name);
     }
 
-    public function getArticlesByDate($category): array
+    public function getSubCategories(?int $category): array
     {
-        if ($category == null){
-            return $this->dbManager->getAllArticles(self::BY_DATE);
-        }
-        return $this->dbManager->getArticles($category, self::BY_DATE);
-    }
-
-    public function getArticlesByView($category): array
-    {
-        if ($category == null){
-            return $this->dbManager->getAllArticles(self::BY_VIEW);
-        }
-        return $this->dbManager->getArticles($category, self::BY_VIEW);
+        return $this->dbManager->getSubCategories($category);
     }
 
     public function getArticleById(int $id):? Article
     {
         return $this->dbManager->getArticleById($id);
+    }
+
+    public function getArticlesByDate(?int $category): array
+    {
+        return $this->dbManager->getArticles($category, self::BY_DATE);
+    }
+
+    public function getArticlesByView(?int $category): array
+    {
+        return $this->dbManager->getArticles($category, self::BY_VIEW);
+    }
+
+    public function increaseView(Article $article)
+    {
+        $this->dbManager->increaseView($article);
     }
 }
