@@ -38,9 +38,11 @@
                     <ul class="dropdown-menu">
                         <li><a href="{{ path('logout') }}">Log out</a></li>
                         {% if user.getIsSubscribe %}
-                            <li><a href="#">Unsubscribe</a></li>
+                            <li id="Unsubscribe" onclick="unSubscribe({{ user.getId }})"><a>Unsubscribe</a></li>
+                            <li id="Subscribe" class="hidden" onclick="subscribe({{ user.getId }})"><a>Subscribe</a></li>
                         {% else %}
-                            <li><a href="#">Subscribe</a></li>
+                            <li id="Subscribe" onclick="subscribe({{ user.getId }})"><a>Subscribe</a></li>
+                            <li id="Unsubscribe" class="hidden" onclick="unSubscribe({{ user.getId }})"><a>Unsubscribe</a></li>
                         {% endif %}
                     </ul>
                 </li>

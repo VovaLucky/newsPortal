@@ -139,6 +139,11 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->isSubscribe;
     }
 
+    public function changeSubscribe()
+    {
+        $this->isSubscribe = !$this->isSubscribe;
+    }
+
     public function setUserKey(UserKey $userKey)
     {
         $this->userKey = $userKey;
