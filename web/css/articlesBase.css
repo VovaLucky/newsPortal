@@ -54,3 +54,7 @@ body {
 .main .page-header {
     margin-top: 0;
 }
+
+.form-small {
+    width: 30%;
+}

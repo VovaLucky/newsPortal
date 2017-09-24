@@ -1,10 +1,12 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\DataBaseManager;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use AppBundle\Entity\User;
+use AppBundle\Entity\UserKey;
 
-class DataBaseManager
+class UserDBManager
 {
     private $db;
     const BYTE_COUNT = 32;

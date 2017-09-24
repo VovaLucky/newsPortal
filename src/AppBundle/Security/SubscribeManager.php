@@ -3,8 +3,7 @@
 namespace AppBundle\Security;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use AppBundle\Entity\User;
-use AppBundle\Entity\DataBaseManager;
+use AppBundle\DataBaseManager\UserDBManager;
 
 class SubscribeManager
 {
@@ -12,7 +11,7 @@ class SubscribeManager
 
     public function __construct(ManagerRegistry $doctrine)
     {
-        $this->dbManager = new DataBaseManager($doctrine);
+        $this->dbManager = new UserDBManager($doctrine);
     }
 
     public function changeSubscribeStatus(int $id)

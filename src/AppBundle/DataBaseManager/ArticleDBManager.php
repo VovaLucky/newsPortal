@@ -1,30 +1,17 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\DataBaseManager;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use AppBundle\Entity\Article;
 
-class DataBaseArticleManager
+class ArticleDBManager
 {
     private $db;
 
     public function __construct(ManagerRegistry $doctrine)
     {
         $this->db = $doctrine->getManager();
-    }
-
-    public function getCategoryByName(string $name):? Category
-    {
-        return $this->db
-            ->getRepository('AppBundle\Entity\Category')
-            ->findOneBy(['name' => $name]);
-    }
-
-    public function getSubCategories(?int $category): array
-    {
-        return $this->db
-            ->getRepository('AppBundle\Entity\Category')
-            ->findBy(['parent' => $category], ['name' => 'ASC']);
     }
 
     public function getArticleById(int $id):? Article
@@ -48,6 +35,13 @@ class DataBaseArticleManager
                 [$criteria => 'DESC']
             );
         }
+    }
+
+    public function getAllArticles(): array
+    {
+        return $this->db
+            ->getRepository('AppBundle\Entity\Article')
+            ->findBy([], ['title' => 'ASC']);
     }
 
     public function increaseView(Article $article)

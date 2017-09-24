@@ -59,11 +59,6 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $userKey;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Article", mappedBy="author")
-     */
-    private $article;
-
     public function getId(): int
     {
         return $this->id;
@@ -152,16 +147,6 @@ class User implements AdvancedUserInterface, \Serializable
     public function getUserKey():? UserKey
     {
         return $this->userKey;
-    }
-
-    public function setArticle(Article $article)
-    {
-        $this->article = $article;
-    }
-
-    public function getArticle():? Article
-    {
-        return $this->article;
     }
 
     public function eraseCredentials()

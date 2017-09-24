@@ -4,8 +4,8 @@ namespace AppBundle\Security;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use AppBundle\DataBaseManager\UserDBManager;
 use AppBundle\Entity\User;
-use AppBundle\Entity\DataBaseManager;
 
 class RegistrationManager
 {
@@ -15,7 +15,7 @@ class RegistrationManager
 
     public function __construct(ManagerRegistry $doctrine, UserPasswordEncoderInterface $encoder)
     {
-        $this->dbManager = new DataBaseManager($doctrine);
+        $this->dbManager = new UserDBManager($doctrine);
         $this->encoder = $encoder;
     }
 

@@ -16,7 +16,7 @@ class RecoverPasswordController extends Controller
      * @Route("/recoverPassword", name="recoverPassword")
      * @Method("GET")
      */
-    public function resetPasswordAction(Request $request)
+    public function resetPasswordAction()
     {
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('news');

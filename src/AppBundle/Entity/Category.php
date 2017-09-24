@@ -23,7 +23,12 @@ class Category
     private $name;
 
     /**
-     * @ORM\OneToOne(targetEntity="Category")
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+     */
+    private $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent;
@@ -33,6 +38,14 @@ class Category
      */
     private $article;
 
+    public function __construct(string $name, ?Category $parent)
+    {
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->article = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->name = $name;
+        $this->parent = $parent;
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -41,8 +54,6 @@ class Category
     public function setName(string $name)
     {
         $this->name = $name;
-
-        return $this;
     }
 
     public function getName(): string
@@ -50,7 +61,17 @@ class Category
         return $this->name;
     }
 
-    public function setParent($parent)
+    public function setChildren(array $children)
+    {
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection($children);
+    }
+
+    public function getChildren(): \Doctrine\Common\Collections\ArrayCollection
+    {
+        return $this->children;
+    }
+
+    public function setParent(Category $parent)
     {
         $this->parent = $parent;
     }
@@ -60,12 +81,12 @@ class Category
         return $this->parent;
     }
 
-    public function setArticle(Article $article)
+    public function setArticle(array $article)
     {
-        $this->article = $article;
+        $this->article = new \Doctrine\Common\Collections\ArrayCollection($article);
     }
 
-    public function getArticle():? Article
+    public function getArticle(): \Doctrine\Common\Collections\ArrayCollection
     {
         return $this->article;
     }

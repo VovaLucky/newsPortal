@@ -16,11 +16,15 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Article</a></li>
-                            <li><a href="#">Category</a></li>
+                            <li><a href="{{ path('addArticle') }}">Article</a></li>
+                            <li><a href="{{ path('addCategory') }}">Category</a></li>
                         </ul>
                     </li>
-                    {% block edit %}{% endblock %}
+
+                    {% if edit is defined %}
+                        <li><a href="{{ path('editArticle', {'page': article.getId}) }}">Edit</a></li>
+                        <li><a href="{{ path('deleteArticle', {'page': article.getId}) }}">Delete</a></li>
+                    {% endif %}
                 {% endif %}
             </ul>
 

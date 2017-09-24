@@ -3,9 +3,8 @@
 namespace AppBundle\Security;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use AppBundle\Entity\DataBaseArticleManager;
+use AppBundle\DataBaseManager\ArticleDBManager;
 use AppBundle\Entity\Article;
-use AppBundle\Entity\Category;
 
 class ArticleManager
 {
@@ -15,17 +14,7 @@ class ArticleManager
 
     public function __construct(ManagerRegistry $doctrine)
     {
-        $this->dbManager = new DataBaseArticleManager($doctrine);
-    }
-
-    public function getCategoryByName(string $name):? Category
-    {
-        return $this->dbManager->getCategoryByName($name);
-    }
-
-    public function getSubCategories(?int $category): array
-    {
-        return $this->dbManager->getSubCategories($category);
+        $this->dbManager = new ArticleDBManager($doctrine);
     }
 
     public function getArticleById(int $id):? Article
@@ -41,6 +30,11 @@ class ArticleManager
     public function getArticlesByView(?int $category): array
     {
         return $this->dbManager->getArticles($category, self::BY_VIEW);
+    }
+
+    public function getAllArticles(): array
+    {
+        return $this->dbManager->getAllArticles();
     }
 
     public function increaseView(Article $article)
