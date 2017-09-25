@@ -38,6 +38,14 @@ class ArticleManager
         $this->dbManager->addArticle($article);
     }
 
+    public function deleteArticle(int $id)
+    {
+        $article = $this->getArticleById($id);
+        if ($article != null) {
+            $this->dbManager->deleteArticle($article);
+        }
+    }
+
     public function getArticleById(int $id):? Article
     {
         return $this->dbManager->getArticleById($id);

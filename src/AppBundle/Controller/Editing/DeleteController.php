@@ -16,8 +16,9 @@ class DeleteController extends Controller
      * @Method("GET")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function deleteArticleAction(Request $request, ArticleManager $articleManager, int $page)
+    public function deleteArticleAction(ArticleManager $articleManager, int $page)
     {
+        $articleManager->deleteArticle($page);
         return $this->redirectToRoute('news');
     }
 }

@@ -21,6 +21,12 @@ class ArticleDBManager
         $this->db->flush();
     }
 
+    public function deleteArticle(Article $article)
+    {
+        $this->db->remove($article);
+        $this->db->flush();
+    }
+
     public function getArticleById(int $id):? Article
     {
         return $this->db
