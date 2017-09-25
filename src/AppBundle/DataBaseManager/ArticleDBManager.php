@@ -27,6 +27,12 @@ class ArticleDBManager
         $this->db->flush();
     }
 
+    public function updateArticle(Article $article)
+    {
+        $this->db->persist($article);
+        $this->db->flush();
+    }
+
     public function getArticleById(int $id):? Article
     {
         return $this->db

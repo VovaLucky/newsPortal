@@ -23,7 +23,7 @@
 
                     {% if edit is defined %}
                         <li><a href="{{ path('editArticle', {'page': article.getId}) }}">Edit</a></li>
-                        <li><a href="{{ path('deleteArticle', {'page': article.getId}) }}">Delete</a></li>
+                        <li><a href="" data-toggle="modal" data-target="#deleteModal">Delete</a></li>
                     {% endif %}
                 {% endif %}
             </ul>
@@ -60,3 +60,24 @@
         </div>
     </div>
 </nav>
+
+{% if edit is defined %}
+<div id="deleteModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><button class="close" type="button" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Delete article</h4>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the article? Undo will not be possible.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Cancel</button>
+                <a href="{{ path('deleteArticle', {'page': article.getId}) }}">
+                    <button class="btn btn-default" type="button">Delete</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

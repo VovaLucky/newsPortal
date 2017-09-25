@@ -1,17 +1,23 @@
 {% extends 'news/articlesBase.html.twig' %}
 
 {% block content %}
-    <h1 class="page-header">Add new Article</h1>
+    <h1 class="page-header">Edit Article</h1>
 
-    <form class="form-signin" action="{{ path('addArticlePost') }}" method="POST">
+    <form class="form-signin" action="{{ path('editArticlePost', {'page': editArticle.id}) }}" method="POST">
         <div class="row">
             <div class="col-md-8 form-group">
                 <h4><label for="Category">Category</label></h4>
                 <select class="form-control" name="Category" id="Category">
                     {% for category in categories %}
-                        <option value="{{ category.getName }}">
-                            {{ category.getName }}
-                        </option>
+                        {% if category.getId == editArticle.category.id %}
+                            <option selected value="{{ category.getName }}">
+                                {{ category.getName }}
+                            </option>
+                        {% else %}
+                            <option value="{{ category.getName }}">
+                                {{ category.getName }}
+                            </option>
+                        {% endif %}
                     {% endfor %}
                 </select>
             </div>
@@ -21,7 +27,7 @@
         <div class="row">
             <div class="col-md-8 form-group">
                 <h4><label for="Title">Title</label></h4>
-                <input type="text" name="Title" id="Title" class="form-control" placeholder="Title" required>
+                <input type="text" name="Title" id="Title" class="form-control" placeholder="Title" value="{{ editArticle.title }}" required>
             </div>
             <div class="col-md-4"></div>
         </div>
@@ -29,7 +35,7 @@
         <div class="row">
             <div class="col-md-8 form-group">
                 <h4><label for="Image">Image</label></h4>
-                <input type="text" name="Image" id="Image" class="form-control" placeholder="Path to image">
+                <input type="text" name="Image" id="Image" class="form-control" placeholder="Path to image" value="{{ editArticle.image }}">
             </div>
             <div class="col-md-4"></div>
         </div>
@@ -37,7 +43,7 @@
         <div class="row">
             <div class="col-md-8 form-group">
                 <h4><label for="Text">Text</label></h4>
-                <textarea class="form-control" name="Text" id="Text" rows="15" placeholder="Text" required></textarea>
+                <textarea class="form-control" name="Text" id="Text" rows="15" placeholder="Text" required>{{ editArticle.text }}</textarea>
             </div>
             <div class="col-md-4"></div>
         </div>
@@ -49,9 +55,18 @@
                     <select class="form-control" name="Similar[]" id="Similar">
                         <option value=""></option>
                         {% for article in articles %}
-                            <option value="{{ article.getId }}">
-                                {{ article.getTitle }}
-                            </option>
+                            {% if article.getId != editArticle.id %}
+                                {% if editArticle.similarArticles|length > i and
+                                    article.getId == editArticle.similarArticles[i].id %}
+                                    <option selected value="{{ article.getId }}">
+                                        {{ article.getTitle }}
+                                    </option>
+                                {% else %}
+                                    <option value="{{ article.getId }}">
+                                        {{ article.getTitle }}
+                                    </option>
+                                {% endif %}
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>
@@ -65,7 +80,7 @@
             <div class="col-md-2"></div>
             <div class="col-md-3 form-group">
                 <button type="submit" class="btn btn-lg btn-success btn-block">
-                    Add article
+                    Update article
                 </button>
             </div>
             <div class="col-md-7"></div>

@@ -28,13 +28,7 @@ class ArticleManager
         array $similar
     ) {
         $article = new Article($category, $user, $title, $image, $text);
-        $similarNews = [];
-        foreach ($similar as $articleId) {
-            if ($articleId != null) {
-                $similarNews[] = $this->getArticleById($articleId);
-            }
-        }
-        $article->setSimilarArticles($similarNews);
+        $this->setSimilarArticles($article, $similar);
         $this->dbManager->addArticle($article);
     }
 
@@ -44,6 +38,25 @@ class ArticleManager
         if ($article != null) {
             $this->dbManager->deleteArticle($article);
         }
+    }
+
+    public function updateArticle(
+        int $id,
+        Category $category,
+        User $user,
+        string $title,
+        string $image,
+        string $text,
+        array $similar
+    ) {
+        $article = $this->getArticleById($id);
+        $article->setCategory($category);
+        $article->setAuthor($user);
+        $article->setTitle($title);
+        $article->setImage($image);
+        $article->setText($text);
+        $this->setSimilarArticles($article, $similar);
+        $this->dbManager->updateArticle($article);
     }
 
     public function getArticleById(int $id):? Article
@@ -69,5 +82,17 @@ class ArticleManager
     public function increaseView(Article $article)
     {
         $this->dbManager->increaseView($article);
+    }
+
+    private function setSimilarArticles(Article $article, array $similar)
+    {
+        $similar = array_unique($similar);
+        $similarNews = [];
+        foreach ($similar as $articleId) {
+            if ($articleId != null) {
+                $similarNews[] = $this->getArticleById($articleId);
+            }
+        }
+        $article->setSimilarArticles($similarNews);
     }
 }
