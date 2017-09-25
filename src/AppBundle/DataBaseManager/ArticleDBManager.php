@@ -1,10 +1,11 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\DataBaseManager;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use AppBundle\Entity\Article;
 
-class DataBaseArticleManager
+class ArticleDBManager
 {
     private $db;
 
@@ -13,18 +14,23 @@ class DataBaseArticleManager
         $this->db = $doctrine->getManager();
     }
 
-    public function getCategoryByName(string $name):? Category
+    public function addArticle(Article $article)
     {
-        return $this->db
-            ->getRepository('AppBundle\Entity\Category')
-            ->findOneBy(['name' => $name]);
+        $article->setDate($this->getTime());
+        $this->db->persist($article);
+        $this->db->flush();
     }
 
-    public function getSubCategories(?int $category): array
+    public function deleteArticle(Article $article)
     {
-        return $this->db
-            ->getRepository('AppBundle\Entity\Category')
-            ->findBy(['parent' => $category], ['name' => 'ASC']);
+        $this->db->remove($article);
+        $this->db->flush();
+    }
+
+    public function updateArticle(Article $article)
+    {
+        $this->db->persist($article);
+        $this->db->flush();
     }
 
     public function getArticleById(int $id):? Article
@@ -50,10 +56,22 @@ class DataBaseArticleManager
         }
     }
 
+    public function getAllArticles(): array
+    {
+        return $this->db
+            ->getRepository('AppBundle\Entity\Article')
+            ->findBy([], ['title' => 'ASC']);
+    }
+
     public function increaseView(Article $article)
     {
         $article->increaseView();
         $this->db->persist($article);
         $this->db->flush();
+    }
+
+    private function getTime(): \DateTime
+    {
+        return new \DateTime();
     }
 }

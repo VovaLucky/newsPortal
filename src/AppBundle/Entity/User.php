@@ -59,11 +59,6 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $userKey;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Article", mappedBy="author")
-     */
-    private $article;
-
     public function getId(): int
     {
         return $this->id;
@@ -139,6 +134,11 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->isSubscribe;
     }
 
+    public function changeSubscribe()
+    {
+        $this->isSubscribe = !$this->isSubscribe;
+    }
+
     public function setUserKey(UserKey $userKey)
     {
         $this->userKey = $userKey;
@@ -147,16 +147,6 @@ class User implements AdvancedUserInterface, \Serializable
     public function getUserKey():? UserKey
     {
         return $this->userKey;
-    }
-
-    public function setArticle(Article $article)
-    {
-        $this->article = $article;
-    }
-
-    public function getArticle():? Article
-    {
-        return $this->article;
     }
 
     public function eraseCredentials()

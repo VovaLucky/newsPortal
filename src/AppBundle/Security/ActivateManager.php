@@ -3,7 +3,7 @@
 namespace AppBundle\Security;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use AppBundle\Entity\DataBaseManager;
+use AppBundle\DataBaseManager\UserDBManager;
 
 class ActivateManager
 {
@@ -11,7 +11,7 @@ class ActivateManager
 
     public function __construct(ManagerRegistry $doctrine)
     {
-        $this->dbManager = new DataBaseManager($doctrine);
+        $this->dbManager = new UserDBManager($doctrine);
     }
 
     public function activateUser(string $token)

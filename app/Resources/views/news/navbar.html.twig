@@ -16,11 +16,15 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Article</a></li>
-                            <li><a href="#">Category</a></li>
+                            <li><a href="{{ path('addArticle') }}">Article</a></li>
+                            <li><a href="{{ path('addCategory') }}">Category</a></li>
                         </ul>
                     </li>
-                    {% block edit %}{% endblock %}
+
+                    {% if edit is defined %}
+                        <li><a href="{{ path('editArticle', {'page': article.getId}) }}">Edit</a></li>
+                        <li><a href="" data-toggle="modal" data-target="#deleteModal">Delete</a></li>
+                    {% endif %}
                 {% endif %}
             </ul>
 
@@ -38,9 +42,11 @@
                     <ul class="dropdown-menu">
                         <li><a href="{{ path('logout') }}">Log out</a></li>
                         {% if user.getIsSubscribe %}
-                            <li><a href="#">Unsubscribe</a></li>
+                            <li id="Unsubscribe" onclick="unSubscribe({{ user.getId }})"><a>Unsubscribe</a></li>
+                            <li id="Subscribe" class="hidden" onclick="subscribe({{ user.getId }})"><a>Subscribe</a></li>
                         {% else %}
-                            <li><a href="#">Subscribe</a></li>
+                            <li id="Subscribe" onclick="subscribe({{ user.getId }})"><a>Subscribe</a></li>
+                            <li id="Unsubscribe" class="hidden" onclick="unSubscribe({{ user.getId }})"><a>Unsubscribe</a></li>
                         {% endif %}
                     </ul>
                 </li>
@@ -54,3 +60,24 @@
         </div>
     </div>
 </nav>
+
+{% if edit is defined %}
+<div id="deleteModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><button class="close" type="button" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Delete article</h4>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the article? Undo will not be possible.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Cancel</button>
+                <a href="{{ path('deleteArticle', {'page': article.getId}) }}">
+                    <button class="btn btn-default" type="button">Delete</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

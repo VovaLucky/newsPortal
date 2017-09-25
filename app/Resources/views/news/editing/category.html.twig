@@ -1,0 +1,36 @@
+{% extends 'news/articlesBase.html.twig' %}
+
+{% block content %}
+    <h1 class="page-header">Add new Category</h1>
+
+    <div class="container form-small">
+        <form class="form-signin" action="{{ path('addCategoryPost') }}" method="POST">
+            <label for="CategoryName">Category name</label>
+            <input type="text" class="form-control" name="CategoryName" id="CategoryName" placeholder="Name" value="{{ name }}" required autofocus>
+            <p></p>
+            <label for="Parent">Parent category</label>
+            <select class="form-control" name="Parent" id="Parent">
+                <option value=""></option>
+                {% for category in categories %}
+                    <option value="{{ category.getName }}">
+                        {{ category.getName }}
+                    </option>
+                {% endfor %}
+            </select>
+            <p></p>
+            <p>
+                <button type="submit" class="btn btn-lg btn-success btn-block">
+                    Add category
+                </button>
+            </p>
+        </form>
+
+        {% if error is defined %}
+            <div class="form-signin">
+                <div class="alert alert-danger" role="alert">
+                    This category already exist.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

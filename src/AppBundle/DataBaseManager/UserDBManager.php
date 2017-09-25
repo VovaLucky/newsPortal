@@ -1,10 +1,12 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\DataBaseManager;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use AppBundle\Entity\User;
+use AppBundle\Entity\UserKey;
 
-class DataBaseManager
+class UserDBManager
 {
     private $db;
     const BYTE_COUNT = 32;
@@ -54,6 +56,13 @@ class DataBaseManager
         return null !== $this->getUserByToken($token);
     }
 
+    public function getUserById(int $id):? User
+    {
+        return $this->db
+            ->getRepository('AppBundle\Entity\User')
+            ->findOneBy(['id' => $id]);
+    }
+
     public function activateUser(User $user)
     {
         $user->setIsActive(true);
@@ -75,6 +84,13 @@ class DataBaseManager
     {
         $userKey = $user->getUserKey();
         $this->db->remove($userKey);
+        $this->db->persist($user);
+        $this->db->flush();
+    }
+
+    public function changeSubscribe(User $user)
+    {
+        $user->changeSubscribe();
         $this->db->persist($user);
         $this->db->flush();
     }

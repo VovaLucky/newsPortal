@@ -23,15 +23,9 @@ class Article
     private $title;
 
     /**
-     * @ORM\Column(name="date", type="datetime")
-     */
-    private $date;
-
-    /**
      * @ORM\Column(name="text", type="text")
      */
     private $text;
-
     const SIZE_SHORT_TEXT = 150;
 
     /**
@@ -40,9 +34,20 @@ class Article
     private $image;
 
     /**
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+
+    /**
      * @ORM\Column(name="view", type="integer")
      */
     private $view;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id");
+     */
+    private $author;
 
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="article")
@@ -51,10 +56,35 @@ class Article
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="article")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id");
+     * @ORM\ManyToMany(targetEntity="Article", mappedBy="similarArticles")
      */
-    private $author;
+    private $articlesWithThis;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Article", inversedBy="articlesWithThis")
+     * @ORM\JoinTable(name="similar_articles",
+     *      joinColumns={@ORM\JoinColumn(name="base_article_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="similar_article_id", referencedColumnName="id")}
+     *      )
+     */
+    private $similarArticles;
+
+    public function __construct(
+        Category $category,
+        User $user,
+        string $title,
+        string $image,
+        string $text
+    ) {
+        $this->articlesWithThis = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->similarArticles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->category = $category;
+        $this->author = $user;
+        $this->title = $title;
+        $this->image = $image;
+        $this->text = $text;
+        $this->view = 0;
+    }
 
     public function getId(): int
     {
@@ -69,16 +99,6 @@ class Article
     public function getTitle(): string
     {
         return $this->title;
-    }
-
-    public function setDate(\DateTime $date)
-    {
-        $this->date = $date;
-    }
-
-    public function getDate(): \DateTime
-    {
-        return $this->date;
     }
 
     public function setText(string $text)
@@ -110,6 +130,16 @@ class Article
         return $this->image;
     }
 
+    public function setDate(\DateTime $date)
+    {
+        $this->date = $date;
+    }
+
+    public function getDate(): \DateTime
+    {
+        return $this->date;
+    }
+
     public function setView(int $view)
     {
         $this->view = $view;
@@ -125,6 +155,16 @@ class Article
         $this->view++;
     }
 
+    public function setAuthor(User $author)
+    {
+        $this->author = $author;
+    }
+
+    public function getAuthor(): User
+    {
+        return $this->author;
+    }
+
     public function setCategory(Category $category)
     {
         $this->category = $category;
@@ -135,14 +175,24 @@ class Article
         return $this->category;
     }
 
-    public function setAuthor(User $author)
+    public function setArticlesWithThis(array $articlesWithThis)
     {
-        $this->author = $author;
+        $this->articlesWithThis = new \Doctrine\Common\Collections\ArrayCollection($articlesWithThis);
     }
 
-    public function getAuthor(): User
+    public function getArticlesWithThis(): \Doctrine\Common\Collections\ArrayCollection
     {
-        return $this->author;
+        return $this->articlesWithThis;
+    }
+
+    public function setSimilarArticles(array $similarArticles)
+    {
+        $this->similarArticles = new \Doctrine\Common\Collections\ArrayCollection($similarArticles);
+    }
+
+    public function getSimilarArticles(): array
+    {
+        return $this->similarArticles->toArray();
     }
 }
 

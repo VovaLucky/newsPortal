@@ -3,3 +3,13 @@
     margin-top: 2%;
     margin-bottom: 3%;
 }
+
+.featurette-divider {
+    margin: 20px 0;
+}
+
+.featurette-heading {
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -1px;
+}

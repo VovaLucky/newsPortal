@@ -4,7 +4,7 @@ namespace AppBundle\Security;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use AppBundle\Entity\DataBaseManager;
+use AppBundle\DataBaseManager\UserDBManager;
 use AppBundle\Entity\User;
 
 class RecoverManager
@@ -15,7 +15,7 @@ class RecoverManager
 
     public function __construct(ManagerRegistry $doctrine, UserPasswordEncoderInterface $encoder)
     {
-        $this->dbManager = new DataBaseManager($doctrine);
+        $this->dbManager = new UserDBManager($doctrine);
         $this->encoder = $encoder;
     }
 

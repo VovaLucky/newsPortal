@@ -2,8 +2,9 @@
 
 namespace AppBundle\Security;
 
+use AppBundle\Entity\User;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use AppBundle\Entity\DataBaseArticleManager;
+use AppBundle\DataBaseManager\ArticleDBManager;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Category;
 
@@ -15,17 +16,47 @@ class ArticleManager
 
     public function __construct(ManagerRegistry $doctrine)
     {
-        $this->dbManager = new DataBaseArticleManager($doctrine);
+        $this->dbManager = new ArticleDBManager($doctrine);
     }
 
-    public function getCategoryByName(string $name):? Category
-    {
-        return $this->dbManager->getCategoryByName($name);
+    public function addArticle(
+        Category $category,
+        User $user,
+        string $title,
+        string $image,
+        string $text,
+        array $similar
+    ) {
+        $article = new Article($category, $user, $title, $image, $text);
+        $this->setSimilarArticles($article, $similar);
+        $this->dbManager->addArticle($article);
     }
 
-    public function getSubCategories(?int $category): array
+    public function deleteArticle(int $id)
     {
-        return $this->dbManager->getSubCategories($category);
+        $article = $this->getArticleById($id);
+        if ($article != null) {
+            $this->dbManager->deleteArticle($article);
+        }
+    }
+
+    public function updateArticle(
+        int $id,
+        Category $category,
+        User $user,
+        string $title,
+        string $image,
+        string $text,
+        array $similar
+    ) {
+        $article = $this->getArticleById($id);
+        $article->setCategory($category);
+        $article->setAuthor($user);
+        $article->setTitle($title);
+        $article->setImage($image);
+        $article->setText($text);
+        $this->setSimilarArticles($article, $similar);
+        $this->dbManager->updateArticle($article);
     }
 
     public function getArticleById(int $id):? Article
@@ -43,8 +74,25 @@ class ArticleManager
         return $this->dbManager->getArticles($category, self::BY_VIEW);
     }
 
+    public function getAllArticles(): array
+    {
+        return $this->dbManager->getAllArticles();
+    }
+
     public function increaseView(Article $article)
     {
         $this->dbManager->increaseView($article);
+    }
+
+    private function setSimilarArticles(Article $article, array $similar)
+    {
+        $similar = array_unique($similar);
+        $similarNews = [];
+        foreach ($similar as $articleId) {
+            if ($articleId != null) {
+                $similarNews[] = $this->getArticleById($articleId);
+            }
+        }
+        $article->setSimilarArticles($similarNews);
     }
 }
