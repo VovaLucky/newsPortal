@@ -14,6 +14,13 @@ class ArticleDBManager
         $this->db = $doctrine->getManager();
     }
 
+    public function addArticle(Article $article)
+    {
+        $article->setDate($this->getTime());
+        $this->db->persist($article);
+        $this->db->flush();
+    }
+
     public function getArticleById(int $id):? Article
     {
         return $this->db
@@ -49,5 +56,10 @@ class ArticleDBManager
         $article->increaseView();
         $this->db->persist($article);
         $this->db->flush();
+    }
+
+    private function getTime(): \DateTime
+    {
+        return new \DateTime();
     }
 }

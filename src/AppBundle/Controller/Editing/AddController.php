@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Security\ArticleManager;
 use AppBundle\Security\CategoryManager;
+use AppBundle\Security\RegistrationManager;
 
 class AddController extends Controller
 {
@@ -24,8 +25,7 @@ class AddController extends Controller
             'categories' => $categoryManager->getAllCategories(),
             'articles' => $articleManager->getAllArticles(),
             'type' => 'news',
-            'typeCategory' => 'newsByCategory',
-            'name' => ''
+            'typeCategory' => 'newsByCategory'
         ]);
     }
 
@@ -33,8 +33,22 @@ class AddController extends Controller
      * @Route("/add/article/post", name="addArticlePost")
      * @Method("POST")
      */
-    public function addArticlePostAction(ArticleManager $articleManager, CategoryManager $categoryManager)
-    {
+    public function addArticlePostAction(
+        Request $request,
+        ArticleManager $articleManager,
+        CategoryManager $categoryManager,
+        RegistrationManager $registrationManager
+    ) {
+        $categoryName = $request->request->get('Category');
+        $title = $request->request->get('Title');
+        $image = $request->request->get('Image');
+        $text = $request->request->get('Text');
+        $userId = $request->request->get('UserId');
+        $similar = $request->request->get('Similar');
+
+        $category = $categoryManager->getCategoryByName($categoryName);
+        $user = $registrationManager->getUserById($userId);
+        $articleManager->addArticle($category, $user, $title, $image, $text, $similar);
         return $this->redirectToRoute('news');
     }
 

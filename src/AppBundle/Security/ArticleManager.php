@@ -2,9 +2,11 @@
 
 namespace AppBundle\Security;
 
+use AppBundle\Entity\User;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use AppBundle\DataBaseManager\ArticleDBManager;
 use AppBundle\Entity\Article;
+use AppBundle\Entity\Category;
 
 class ArticleManager
 {
@@ -15,6 +17,25 @@ class ArticleManager
     public function __construct(ManagerRegistry $doctrine)
     {
         $this->dbManager = new ArticleDBManager($doctrine);
+    }
+
+    public function addArticle(
+        Category $category,
+        User $user,
+        string $title,
+        string $image,
+        string $text,
+        array $similar
+    ) {
+        $article = new Article($category, $user, $title, $image, $text);
+        $similarNews = [];
+        foreach ($similar as $articleId) {
+            if ($articleId != null) {
+                $similarNews[] = $this->getArticleById($articleId);
+            }
+        }
+        $article->setSimilarArticles($similarNews);
+        $this->dbManager->addArticle($article);
     }
 
     public function getArticleById(int $id):? Article

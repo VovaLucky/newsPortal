@@ -3,7 +3,125 @@
 {% block content %}
     <h1 class="page-header">Add new Article</h1>
 
-    <div class="container">
+    <form class="form-signin" action="{{ path('addArticlePost') }}" method="POST">
+        <div class="row">
+            <div class="col-md-8 form-group">
+                <h4><label for="Category">Category</label></h4>
+                <select class="form-control" name="Category" id="Category">
+                    {% for category in categories %}
+                        <option value="{{ category.getName }}">
+                            {{ category.getName }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
 
-    </div>
+        <div class="row">
+            <div class="col-md-8 form-group">
+                <h4><label for="Title">Title</label></h4>
+                <input type="text" name="Title" id="Title" class="form-control" placeholder="Title" required>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 form-group">
+                <h4><label for="Image">Image</label></h4>
+                <input type="text" name="Image" id="Image" class="form-control" placeholder="Path to image">
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 form-group">
+                <h4><label for="Text">Text</label></h4>
+                <textarea class="form-control" name="Text" id="Text" rows="15" placeholder="Text" required></textarea>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+
+
+        {#Similar articles#}
+        <h4>Similar articles</h4>
+        <div class="row">
+            <div class="col-md-8 form-group">
+                <select class="form-control" name="Similar[]" id="Similar">
+                    <option value=""></option>
+                    {% for article in articles %}
+                        <option value="{{ article.getId }}">
+                            {{ article.getTitle }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 form-group">
+                <select class="form-control" name="Similar[]" id="Similar">
+                    <option value=""></option>
+                    {% for article in articles %}
+                        <option value="{{ article.getId }}">
+                            {{ article.getTitle }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 form-group">
+                <select class="form-control" name="Similar[]" id="Similar">
+                    <option value=""></option>
+                    {% for article in articles %}
+                        <option value="{{ article.getId }}">
+                            {{ article.getTitle }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 form-group">
+                <select class="form-control" name="Similar[]" id="Similar">
+                    <option value=""></option>
+                    {% for article in articles %}
+                        <option value="{{ article.getId }}">
+                            {{ article.getTitle }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 form-group">
+                <select class="form-control" name="Similar[]" id="Similar">
+                    <option value=""></option>
+                    {% for article in articles %}
+                        <option value="{{ article.getId }}">
+                            {{ article.getTitle }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+
+
+        <input type="hidden" name="UserId" id="UserId" value="{{ user.getId }}">
+
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-3 form-group">
+                <button type="submit" class="btn btn-lg btn-success btn-block">
+                    Add article
+                </button>
+            </div>
+            <div class="col-md-7"></div>
+        </div>
+    </form>
 {% endblock %}

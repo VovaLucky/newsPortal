@@ -27,6 +27,11 @@ class RegistrationManager
         $this->dbManager->addUser($user);
     }
 
+    public function getUserById($id): User
+    {
+        return $this->dbManager->getUserById($id);
+    }
+
     private function encodePassword(User $user)
     {
         $encodedPassword = $this->encoder->encodePassword($user, $user->getPlainPassword());

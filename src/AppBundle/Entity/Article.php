@@ -69,10 +69,21 @@ class Article
      */
     private $similarArticles;
 
-    public function __construct()
-    {
+    public function __construct(
+        Category $category,
+        User $user,
+        string $title,
+        string $image,
+        string $text
+    ) {
         $this->articlesWithThis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->similarArticles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->category = $category;
+        $this->author = $user;
+        $this->title = $title;
+        $this->image = $image;
+        $this->text = $text;
+        $this->view = 0;
     }
 
     public function getId(): int
@@ -179,9 +190,9 @@ class Article
         $this->similarArticles = new \Doctrine\Common\Collections\ArrayCollection($similarArticles);
     }
 
-    public function getSimilarArticles(): \Doctrine\Common\Collections\ArrayCollection
+    public function getSimilarArticles(): array
     {
-        return $this->similarArticles;
+        return $this->similarArticles->toArray();
     }
 }
 

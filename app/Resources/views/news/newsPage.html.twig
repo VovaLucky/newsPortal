@@ -27,4 +27,15 @@
             {{ article.text }}
         </p>
     </div>
+
+    {% if article.similarArticles|length > 0 %}
+        <h3 class="featurette-heading">See also:</h3>
+        <hr class="featurette-divider">
+        {% for similar in article.similarArticles %}
+            <a href="{{ path('newsPage', {'page': similar.getId}) }}">
+                {{ similar.getTitle }}
+            </a>
+            <hr class="featurette-divider">
+        {% endfor %}
+    {% endif %}
 {% endblock %}
